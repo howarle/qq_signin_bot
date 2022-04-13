@@ -25,8 +25,7 @@ async def remind_job():
         await bot.send_group_msg(group_id=target_group, message=message_str)
 
 
-# @nonebot.scheduler.scheduled_job('cron', hour=signin_time_warning.hour, minute=signin_time_warning.minute)
-@nonebot.scheduler.scheduled_job('cron', hour='*', minute='*')
+@nonebot.scheduler.scheduled_job('cron', hour=signin_time_warning.hour, minute=signin_time_warning.minute)
 async def push_job():
     if not is_workday(datetime.datetime.now().date()):
         return
