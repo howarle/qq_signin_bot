@@ -72,8 +72,10 @@ async def record_sign_in(session: CommandSession):
     else:
         if not is_workday(datetime.datetime.now().date()):
             await session.send('今天似乎不用值班呢 (・ω・)')
-        elif not(signin_time_start <= now_time and signin_time_stop >= now_time):
+        elif (signin_time_start > now_time ):
             await session.send('还没到签到时间呐 ::>_<::\n签到时间：%s ~ %s' % (signin_time_start.strftime('%H:%M'), signin_time_stop.strftime('%H:%M')))
+        elif signin_time_stop < now_time :
+            await session.send('已经过了签到时间呐 ::>_<::\n签到时间：%s ~ %s' % (signin_time_start.strftime('%H:%M'), signin_time_stop.strftime('%H:%M')))
 
 
 @on_command('签到撤销', aliases=['撤销签到'], permission=from_target_group, only_to_me=False)
@@ -177,5 +179,7 @@ async def heartbeat(session: CommandSession):
         ret_str = ret_str + '今天大家记得值班哦!'
     else:
         ret_str = ret_str + '好耶！今天不用值班'
-
-    await session.send(ret_str)
+    
+    now_time = datetime.datetime.now().time()
+    if signin_time_stop >= now_time :
+        await session.send(ret_str)
